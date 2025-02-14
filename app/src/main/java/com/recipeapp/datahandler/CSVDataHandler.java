@@ -32,21 +32,25 @@ public class CSVDataHandler implements DataHandler{
     @Override
     public ArrayList<Recipe> readData()throws IOException{
         ArrayList<Recipe> recipe = new ArrayList<>();
-        ArrayList<Ingredient> ingredients = new ArrayList<>();
+
        String line;
         try(BufferedReader reader = new BufferedReader(new FileReader(filePath))){
-             if((line = reader.readLine()) != null){
+             while((line = reader.readLine()) != null){
+                ArrayList<Ingredient> ingredients = new ArrayList<>();
                 String[] word = line.split(",");
                 for(int i = 1; i < word.length; i++){
                     Ingredient a = new Ingredient(word[i]);
                     ingredients.add(a);
                 }
-                    Recipe b = new Recipe(word[0], ingredients);
-                    recipe.add(b);
-                    
+                Recipe b = new Recipe(word[0], ingredients);
+                recipe.add(b);
              }
+             if(recipe.isEmpty()){
+                return null;
+             }
+
         }catch(IOException e){
-            System.out.println("Failed to add new recipe: " + e);
+            System.out.println("Error reading file: " + e);
         }
         return recipe;
     }
@@ -54,14 +58,19 @@ public class CSVDataHandler implements DataHandler{
     @Override
     public void writeData(Recipe recipe)throws IOException{
         String line;
+        String text = "";
         String word = "";
         try(BufferedReader reader = new BufferedReader(new FileReader(filePath))){
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))){
-            
-            for (Ingredient ingredient : recipe.getIngredients()){
-                word += ingredient + ", ";
+            while((line = reader.readLine()) != null){
+                text += line + "\n";
             }
-            writer.write(reader.readLine() + "\n" + recipe.getname() + "," + word);
+
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))){
+
+            for (Ingredient ingredient : recipe.getIngredients()){
+                word += ingredient.getName() + ", ";
+            }
+            writer.write(text + recipe.getName() + "," + word);
          }catch(IOException e){
             System.out.println("Failed to add new recipe: " + e);
         }

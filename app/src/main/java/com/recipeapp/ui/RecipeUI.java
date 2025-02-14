@@ -38,7 +38,7 @@ public class RecipeUI {
                 switch (choice) {
                     case "1":displayRecipes();
                         break;
-                    case "2":
+                    case "2":addNewRecipe();
                         break;
                     case "3":
                         break;
@@ -56,23 +56,47 @@ public class RecipeUI {
     }
 
     private static void displayRecipes(){
-        try{ArrayList<Recipe> recipes = dataHandler.readData();
+        try{
+            
+            ArrayList<Recipe> recipes = dataHandler.readData();
+            if(recipes != null){
             System.out.println("Recipes: ");
             for(Recipe recipes2 : recipes){
                 System.out.println("-----------------------------------");
-                System.out.println("Recipe Name: " + recipes2.getname());
+                System.out.println("Recipe Name: " + recipes2.getName());
                 for(Ingredient ingredients : recipes2.getIngredients()){
                     System.out.print(ingredients.getName());
                 }
+                System.out.println();
             }
+        }
+        else{
+            System.out.println("No recipes available.");
+        }
            
         }catch(IOException e){
             System.out.println("Error reading file: " + e);
         }
     }
 
-    private void addNewRecipe(Recipe recipe){
-        String line
-        
+    private static void addNewRecipe() throws IOException{
+        ArrayList<Ingredient> ingredients = new ArrayList<>();
+        System.out.println("Adding a new recipe.");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        System.out.print("Enter recipe name:");
+        String name = reader.readLine();
+        String ingredient = "";
+        System.out.println("Enter ingredients (type 'done' when finished):");
+        while(!ingredient.equals("done")){
+            System.out.print("Ingredient:");
+            ingredient = reader.readLine();
+            Ingredient ingredient2 = new Ingredient(ingredient);
+            if(!ingredient.equals("done")){
+            ingredients.add(ingredient2);
+            }
+        }
+        Recipe recipe2 = new Recipe(name, ingredients);
+        dataHandler.writeData(recipe2);
+        System.out.println("Recipe added successfully.");
     }
 }

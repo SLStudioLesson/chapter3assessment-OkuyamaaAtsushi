@@ -13,7 +13,7 @@ public class Recipe {
         this.ingredients = ingredients;
     }
 
-    public String getname(){
+    public String getName(){
         return this.name;
     }
 
