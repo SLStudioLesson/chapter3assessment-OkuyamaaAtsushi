@@ -14,10 +14,35 @@ public class App {
             System.out.println("2. JSON");
             System.out.print("Select (1/2): ");
             String choice = reader.readLine();
+
+            switch(choice){
+                case "1":
+                DataHandler csvDataHandler = new CSVDataHandler();
+                RecipeUI recipeUI = new RecipeUI(csvDataHandler);
+                RecipeUI.displayMenu();
+                break;
+
+                case "2":
+                DataHandler jsonDataHandler = new JSONDataHandler();
+                recipeUI = new RecipeUI(jsonDataHandler);
+                RecipeUI.displayMenu();
+                break;
+
+                default:
+                csvDataHandler = new CSVDataHandler();
+                recipeUI = new RecipeUI(csvDataHandler);
+                RecipeUI.displayMenu();
+                break;
+
+            }
+
+
             
 
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
         }
+        
     }
+    
 }

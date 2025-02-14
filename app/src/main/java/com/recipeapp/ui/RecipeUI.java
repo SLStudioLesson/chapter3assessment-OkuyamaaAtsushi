@@ -6,17 +6,21 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.recipeapp.datahandler.DataHandler;
+import com.recipeapp.model.Ingredient;
+import com.recipeapp.model.Recipe;
+
+
 public class RecipeUI {
-    private BufferedReader reader;
-    private DataHandler dataHandler;
+    private static BufferedReader reader;
+    private static DataHandler dataHandler;
 
     public RecipeUI(DataHandler dataHandler) {
         reader = new BufferedReader(new InputStreamReader(System.in));
         this.dataHandler = dataHandler;
     }
     
-    public void displayMenu() {
-
+    public static void displayMenu() {
         System.out.println("Current mode: " + dataHandler.getMode());
 
         while (true) {
@@ -32,7 +36,7 @@ public class RecipeUI {
                 String choice = reader.readLine();
 
                 switch (choice) {
-                    case "1":
+                    case "1":displayRecipes();
                         break;
                     case "2":
                         break;
@@ -49,5 +53,26 @@ public class RecipeUI {
                 System.out.println("Error reading input from user: " + e.getMessage());
             }
         }
+    }
+
+    private static void displayRecipes(){
+        try{ArrayList<Recipe> recipes = dataHandler.readData();
+            System.out.println("Recipes: ");
+            for(Recipe recipes2 : recipes){
+                System.out.println("-----------------------------------");
+                System.out.println("Recipe Name: " + recipes2.getname());
+                for(Ingredient ingredients : recipes2.getIngredients()){
+                    System.out.print(ingredients.getName());
+                }
+            }
+           
+        }catch(IOException e){
+            System.out.println("Error reading file: " + e);
+        }
+    }
+
+    private void addNewRecipe(Recipe recipe){
+        String line
+        
     }
 }
